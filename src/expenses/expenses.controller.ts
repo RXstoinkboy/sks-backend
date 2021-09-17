@@ -1,19 +1,24 @@
+import { CreateNewExpenseDTO } from './dto/createNewExpenseDTO';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { Expense } from './expenses.types';
+import {
+  CreateNewExpenseReturnType,
+  FindAllExpensesReturnType,
+} from './types/expense.types';
 
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Get()
-  getAllExpenses(): Expense[] {
-    return this.expensesService.getAllExpenses();
+  findAllExpenses(): FindAllExpensesReturnType {
+    return this.expensesService.findAllExpenses();
   }
 
   @Post()
-//   TODO: dokończyć tę metodę. Jeszcze jest potrzebne DTO
-  createNewExpense(@Body): void {
-    this.expensesService.createNewExpense(newExpense);
+  createNewExpense(
+    @Body() createNewExpenseDTO: CreateNewExpenseDTO,
+  ): CreateNewExpenseReturnType {
+    return this.expensesService.createNewExpense(createNewExpenseDTO);
   }
 }

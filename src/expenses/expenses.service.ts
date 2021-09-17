@@ -1,15 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { Expense } from './expenses.types';
+import { CreateNewExpenseDTO } from './dto/createNewExpenseDTO';
+import {
+  CreateNewExpenseReturnType,
+  ExpenseType,
+  FindAllExpensesReturnType,
+} from './types/expense.types';
+import { InjectModel } from '@nestjs/mongoose';
+import { Expense, ExpenseModel } from './schemas/expense.schema';
+
+const DEFAULT_CURRENCY = 'PLN'; // TODO: should be replaced to be based on country selected by user
 
 @Injectable()
 export class ExpensesService {
-  private expenses: Expense[] = []; // TODO: zmienić to na dane z DB
+  constructor(@InjectModel(Expense.name) private expenseModel: ExpenseModel) {}
 
-  getAllExpenses(): Expense[] {
-    return this.expenses;
+  findAllExpenses(): FindAllExpensesReturnType {
+    return this.expenseModel.find().exec();
   }
 
-  createNewExpense(newExpense: Expense): void {
-    this.expenses = [...this.expenses, newExpense];
+  createNewExpense(
+    createNewExpenseDTO: CreateNewExpenseDTO,
+  ): CreateNewExpenseReturnType {
+    const newExpense = new this.expenseModel({
+      ...createNewExpenseDTO,
+      userId: 'abc',
+      currency: createNewExpenseDTO?.currency ?? DEFAULT_CURRENCY,
+      type: createNewExpenseDTO?.type ?? ExpenseType.OUTCOME,
+      // TODO: dodać również name
+    });
+
+    return newExpense.save();
   }
 }
