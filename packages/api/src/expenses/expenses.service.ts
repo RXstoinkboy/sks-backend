@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNewExpenseDTO } from './dto/createNewExpenseDTO';
+import { CreateNewExpenseDto as CreateExpenseDto } from './dto/create-expense.dto';
 import {
-  CreateNewExpenseReturnType,
+  CreateNewExpenseReturnType as CreateExpenseReturnType,
   ExpenseType,
   FindAllExpensesReturnType,
 } from './types/expense.types';
@@ -10,6 +10,7 @@ import { Expense, ExpenseModel } from './schemas/expense.schema';
 
 const DEFAULT_CURRENCY = 'PLN'; // TODO: should be replaced to be based on country selected by user
 
+// TODO: ogarnąć jeszcze temat połączenia Usera z Expense
 @Injectable()
 export class ExpensesService {
   constructor(@InjectModel(Expense.name) private expenseModel: ExpenseModel) {}
@@ -19,14 +20,13 @@ export class ExpensesService {
   }
 
   createNewExpense(
-    createNewExpenseDTO: CreateNewExpenseDTO,
-  ): CreateNewExpenseReturnType {
+    createExpenseDTO: CreateExpenseDto,
+  ): CreateExpenseReturnType {
     const newExpense = new this.expenseModel({
-      ...createNewExpenseDTO,
-      userId: 'abc',
-      currency: createNewExpenseDTO?.currency ?? DEFAULT_CURRENCY,
-      type: createNewExpenseDTO?.type ?? ExpenseType.OUTCOME,
-      // TODO: dodać również name
+      ...createExpenseDTO,
+      user: createExpenseDTO.userId,
+      currency: createExpenseDTO?.currency ?? DEFAULT_CURRENCY,
+      type: createExpenseDTO?.type ?? ExpenseType.OUTCOME,
     });
 
     return newExpense.save();

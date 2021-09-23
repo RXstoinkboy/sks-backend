@@ -1,4 +1,4 @@
-import { CreateNewExpenseDTO } from './dto/createNewExpenseDTO';
+import { CreateNewExpenseDto } from './dto/create-expense.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import {
@@ -17,7 +17,7 @@ export class ExpensesController {
 
   @Post()
   createNewExpense(
-    @Body() createNewExpenseDTO: CreateNewExpenseDTO,
+    @Body() createNewExpenseDTO: CreateNewExpenseDto,
   ): CreateNewExpenseReturnType {
     return this.expensesService.createNewExpense(createNewExpenseDTO);
   }

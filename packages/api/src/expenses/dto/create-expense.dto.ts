@@ -1,7 +1,8 @@
 import { ExpenseType } from '../types/expense.types';
 
-export class CreateNewExpenseDTO {
+export class CreateNewExpenseDto {
   value: number;
   currency?: string;
   type: ExpenseType;
+  userId: string;
 }
