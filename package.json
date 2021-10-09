@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "start": "lerna run start --stream --parallel",
+    "storybook": "lerna run storybook",
     "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {

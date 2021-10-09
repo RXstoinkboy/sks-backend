@@ -16,7 +16,7 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: UserModel) {}
   async createUser(createUserDto: CreateUserDto): CreateUserReturnType {
     if (createUserDto.password !== createUserDto.repeatPassword) {
-      throw 'Passwords do not match';
+      throw 'Passwords do not match'; // TODO: zmienić na poprawne error handlery, np. new HttpEx
     }
 
     if (
