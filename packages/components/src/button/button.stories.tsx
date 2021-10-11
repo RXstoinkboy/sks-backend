@@ -1,35 +1,36 @@
-import React from "react";
-import { ComponentStory, ComponentMeta, ArgTypes } from "@storybook/react";
+import React from 'react';
+import { ComponentStory, ComponentMeta, ArgTypes } from '@storybook/react';
 
-import { Button, ButtonType } from "./button";
+import { Button, ButtonType } from './button';
 
-import { createArg } from "../stories/utils";
-import { ArgCategory } from "../stories/types";
+import { createArg } from '../stories/utils';
+import { ArgCategory } from '../stories/types';
 
 export default {
-  title: "Button",
-  component: Button,
-  argTypes: {
-    type: createArg({
-      description: "It controls what type of button is displayed (e.g PRIMARY)",
-      category: ArgCategory.VISUAL,
-      defaultValue: ButtonType.PRIMARY,
-      control: "select",
-      options: ButtonType,
-    }),
-  }
+   title: 'Button',
+   component: Button,
+   argTypes: {
+      type: createArg({
+         description:
+            'It controls what type of button is displayed (e.g PRIMARY)',
+         category: ArgCategory.VISUAL,
+         defaultValue: ButtonType.PRIMARY,
+         control: 'select',
+         options: ButtonType,
+      }),
+   },
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  type: ButtonType.PRIMARY,
-  children: "Primary",
+   type: ButtonType.PRIMARY,
+   children: 'Primary',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  type: ButtonType.SECONDARY,
-  children: "Secondary",
+   type: ButtonType.SECONDARY,
+   children: 'Secondary',
 };
