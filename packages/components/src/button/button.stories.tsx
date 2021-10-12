@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentStory, ComponentMeta, ArgTypes } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Button, ButtonType } from './button';
 
