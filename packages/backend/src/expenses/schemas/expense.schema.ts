@@ -1,6 +1,6 @@
-import { User } from '../../users/schemas/user.schema';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { User } from '../../users/schemas/user.schema';
 
 export type ExpenseModel = mongoose.Model<ExpenseDocument>;
 export type ExpenseDocument = Expense & Document;
@@ -16,7 +16,7 @@ export class Expense {
    @Prop()
    type: string;
 
-   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+   @Prop({ ref: 'User', type: mongoose.Schema.Types.ObjectId })
    user: User;
 
    @Prop()

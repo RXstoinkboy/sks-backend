@@ -1,6 +1,3 @@
-import { UpdateExpenseDto } from './dto/update-expense.dto';
-import { Injectable } from '@nestjs/common';
-import { CreateExpenseDto as CreateExpenseDto } from './dto/create-expense.dto';
 import {
    CreateNewExpenseReturnType as CreateExpenseReturnType,
    ExpenseType,
@@ -9,8 +6,11 @@ import {
    RemoveExpenseReturnType,
    UpdateExpenseReturnType,
 } from './types/expense.types';
-import { InjectModel } from '@nestjs/mongoose';
 import { Expense, ExpenseModel } from './schemas/expense.schema';
+import { CreateExpenseDto as CreateExpenseDto } from './dto/create-expense.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Injectable } from '@nestjs/common';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
 
 const DEFAULT_CURRENCY = 'PLN'; // TODO: should be replaced to be based on country selected by user
 
@@ -33,9 +33,9 @@ export class ExpensesService {
    ): UpdateExpenseReturnType {
       return this.expenseModel
          .findByIdAndUpdate(id, {
-            value: updateExpenseDto.value,
             currency: updateExpenseDto.currency,
             type: updateExpenseDto.type,
+            value: updateExpenseDto.value,
          })
          .exec();
    }
@@ -49,9 +49,9 @@ export class ExpensesService {
    ): CreateExpenseReturnType {
       const newExpense = new this.expenseModel({
          ...createExpenseDTO,
-         user: createExpenseDTO.user,
          currency: createExpenseDTO?.currency ?? DEFAULT_CURRENCY,
          type: createExpenseDTO?.type ?? ExpenseType.OUTCOME,
+         user: createExpenseDTO.user,
       });
 
       return newExpense.save();

@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserModel } from './schemas/user.schema';
 import {
    CreateUserReturnType,
    FindAllUsersReturnType,
    FindUserReturnType,
    RemoveUserReturnType,
 } from './types/user.types';
+import { User, UserModel } from './schemas/user.schema';
+import { CreateUserDto } from './dto/create-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Injectable } from '@nestjs/common';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 // TODO: serve data validation correctly (probably with pipes)
 @Injectable()
@@ -36,9 +36,9 @@ export class UsersService {
       }
 
       const newUser = new this.userModel({
+         email: createUserDto.email,
          firstName: createUserDto.firstName,
          lastName: createUserDto.lastName,
-         email: createUserDto.email,
          password: createUserDto.password,
       });
 
@@ -55,9 +55,9 @@ export class UsersService {
 
    update(id: string, updateUserDto: UpdateUserDto) {
       return this.userModel.findByIdAndUpdate(id, {
+         email: updateUserDto.email,
          firstName: updateUserDto.firstName,
          lastName: updateUserDto.lastName,
-         email: updateUserDto.email,
          password: updateUserDto.password,
       });
    }

@@ -1,9 +1,11 @@
+import './App.css';
 import React, { useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
 
+const DEFAULT_COUNT = 0;
+const INCREMENT_COUNT = 1;
 function App() {
-   const [count, setCount] = useState(0);
+   const [count, setCount] = useState(DEFAULT_COUNT);
 
    return (
       <div className="App">
@@ -13,7 +15,9 @@ function App() {
             <p>
                <button
                   type="button"
-                  onClick={() => setCount((count) => count + 1)}
+                  onClick={() => {
+                     setCount((num) => num + INCREMENT_COUNT);
+                  }}
                >
                   count is: {count}
                </button>

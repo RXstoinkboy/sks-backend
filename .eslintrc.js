@@ -39,7 +39,7 @@ module.exports = {
       'no-proto': ['error'],
       'no-return-await': ['error'],
       'no-sequences': ['error'],
-      'no-shadow': ['error'],
+      // 'no-shadow': ['error'],
       'no-var': ['error'],
       'prefer-arrow-callback': ['error'],
       'prefer-destructuring': [
