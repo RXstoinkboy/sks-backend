@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 export enum ButtonType {
    PRIMARY = 'PRIMARY',
@@ -10,6 +11,13 @@ export type ButtonProps = {
    children: string;
 };
 
+const StyledButton = styled.button`
+   border: none;
+   background: ${({ theme }) => theme.primaryColor};
+   color: white;
+`;
+StyledButton.displayName = 'StyledButton';
+
 export const Button = (props: ButtonProps): JSX.Element => {
-   return <button>{`${props.children} + ${props.type}`}</button>;
+   return <StyledButton>{`${props.children} + ${props.type}`}</StyledButton>;
 };
