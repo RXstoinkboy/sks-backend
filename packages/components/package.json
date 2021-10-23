@@ -6,7 +6,7 @@
       "storybook": "start-storybook -p 6006",
       "build-storybook": "build-storybook",
       "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" --config ../../.prettierrc",
-      "lint": "eslint \"{src,apps,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix  --max-warnings=20"
+      "lint": "eslint \"{src,apps,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix"
    },
    "dependencies": {
       "@types/styled-components": "^5.1.15",

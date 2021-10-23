@@ -12,5 +12,5 @@ export const parameters = {
 };
 
 export const decorators = [withThemeProvider];
-
+// test
 export const globalTypes = { ...themeGlobalType };

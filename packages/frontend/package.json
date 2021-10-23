@@ -7,7 +7,7 @@
       "build": "tsc && vite build",
       "serve": "vite preview",
       "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" --config ../../.prettierrc",
-      "lint": "eslint \"{src,apps,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix  --max-warnings=20"
+      "lint": "eslint \"{src,apps,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix"
    },
    "dependencies": {
       "react": "^17.0.0",
