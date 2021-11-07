@@ -1,8 +1,9 @@
-import { ThemeTypes } from './theme.types';
+import { Theme, ThemeTypes } from './theme.types';
 
-export const lightTheme = {
+export const lightTheme: Theme = {
    name: ThemeTypes.LIGHT_THEME,
-   primaryColor: 'blue',
+   primary: 'mainGreen',
+   secondary: 'mainBlue',
 };
 
 export const darkTheme = {
