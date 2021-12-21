@@ -26,12 +26,24 @@ const userTypeDefs = gql`
       expenses: [Expense]!
    }
 
+   type CreateOrUpdateResponseType {
+      success: Boolean!
+      message: String
+      user: User
+   }
+
+   type RemoveUserResponseType {
+      success: Boolean!
+      message: String
+   }
+
    input CreateUserDTO {
       email: String!
       password: String!
    }
 
    input UpdateUserDTO {
+      id: ID!
       email: String
       password: String
    }
@@ -42,8 +54,8 @@ const userTypeDefs = gql`
    }
 
    extend type Mutation {
-      createUser(newUser: UpdateUserDTO): User
-      updateUser(userData: UpdateUserDTO): User
+      createUser(newUser: CreateUserDTO): CreateOrUpdateResponseType!
+      updateUser(userData: UpdateUserDTO): CreateOrUpdateResponseType!
       removeUser(userId: ID!): String
    }
 `;
@@ -102,19 +114,43 @@ const UserSchema = new mongoose.Schema<User>({
 
 const UserModel = mongoose.model<User>('User', UserSchema);
 class UserAPI extends DataSource {
-   createUser = async ({ newUser }) => {
+   createUser = async (newUser) => {
+      // TODO: check if there is such email in use already
+      // TODO: check if password is correct etc
       const newUserEntity = new UserModel(newUser);
-      // TODO: poprawić jeszcze to żeby zwracało wynik, bo aktualnie user się tworzy ale nie da się zwrócić stworzonego usera
       const createdUser = await newUserEntity.save();
-      return createdUser;
+
+      return {
+         message: 'User created',
+         success: true,
+         user: createdUser,
+      };
+   };
+   updateUser = ({ id, ...updatedUserData }) => {
+      let updateResponse;
+
+      UserModel.findByIdAndUpdate(
+         id,
+         updatedUserData,
+         { new: true },
+         (err, model) =>
+            (updateResponse = {
+               message: 'User data update',
+               success: true,
+               user: model,
+            }),
+      );
+
+      return updateResponse;
    };
 }
 
 const resolvers = {
    Mutation: {
-      createUser: (_, args, { dataSources }) => {
-         dataSources.UserAPI.createUser(args);
-      },
+      createUser: (_, { newUser }, { dataSources }) =>
+         dataSources.UserAPI.createUser(newUser),
+      updateUser: (_, { userData }, { dataSources }) =>
+         dataSources.UserAPI.updateUser(userData),
    },
    Query: {},
 };
