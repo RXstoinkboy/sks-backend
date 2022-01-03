@@ -38,7 +38,7 @@ module.exports = {
       'max-lines-per-function': ['error', 50],
       'max-nested-callbacks': ['error', 3],
       'max-params': ['error', 3],
-      'no-console': ['error'],
+      'no-console': ['warn'],
       'no-lone-blocks': ['error'],
       'no-magic-numbers': ['error'],
       'no-multi-assign': ['error'],

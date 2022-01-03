@@ -1,5 +1,4 @@
 import { ApolloServer, gql } from 'apollo-server-express';
-import { DataSource } from 'apollo-datasource';
 import { PORT } from './constants/global';
 import { db } from './config/db';
 import { errorHandler } from './middleware/errorHandler.middleware';
@@ -10,58 +9,11 @@ import { setupAppConfig } from './config/app.config';
 
 import * as express from 'express';
 import * as http from 'http';
-import * as mongoose from 'mongoose';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 
-const baseTypeDefs = gql`
-   type Query
-   type Mutation
-`;
+import { UserAPI } from './api/user/user.controller';
+import { userTypeDefs } from './api/user/user.types';
 
-const userTypeDefs = gql`
-   type User {
-      id: ID!
-      email: String!
-      password: String!
-      expenses: [Expense]!
-   }
-
-   type CreateOrUpdateResponseType {
-      success: Boolean!
-      message: String
-      user: User
-   }
-
-   type RemoveUserResponseType {
-      success: Boolean!
-      message: String
-   }
-
-   input CreateUserDTO {
-      email: String!
-      password: String!
-   }
-
-   input UpdateUserDTO {
-      id: ID!
-      email: String
-      password: String
-   }
-
-   extend type Query {
-      user(id: ID!): User
-      users: [User]!
-   }
-
-   extend type Mutation {
-      createUser(newUser: CreateUserDTO): CreateOrUpdateResponseType!
-      updateUser(userData: UpdateUserDTO): CreateOrUpdateResponseType!
-      removeUser(userId: ID!): String
-   }
-`;
-
-// TODO: 'expenses' Query pewnie jeszcze będzie do wywalenia, bo raczej nie ma sensu pobierać wszystkie wydatki
-// TODO: trzeba to będzie jeszcze porządnie zmodularyzować
 const expenseTypeDefs = gql`
    type Expense {
       id: ID!
@@ -89,68 +41,22 @@ const expenseTypeDefs = gql`
    }
 `;
 
+const baseTypeDefs = gql`
+   type Query
+   type Mutation
+`;
+
 const typeDefs = [baseTypeDefs, userTypeDefs, expenseTypeDefs];
 
-interface User extends mongoose.Document {
-   email: string;
-   password: string;
-   expenses: any[]; // TODO: replace with Expense model
-}
-
-const UserSchema = new mongoose.Schema<User>({
-   email: {
-      required: true,
-      type: String,
-   },
-   expenses: {
-      required: true,
-      type: [],
-   },
-   password: {
-      required: true,
-      type: String,
-   },
-});
-
-const UserModel = mongoose.model<User>('User', UserSchema);
-class UserAPI extends DataSource {
-   createUser = async (newUser) => {
-      // TODO: check if there is such email in use already
-      // TODO: check if password is correct etc
-      const newUserEntity = new UserModel(newUser);
-      const createdUser = await newUserEntity.save();
-
-      return {
-         message: 'User created',
-         success: true,
-         user: createdUser,
-      };
-   };
-   updateUser = ({ id, ...updatedUserData }) => {
-      let updateResponse;
-
-      UserModel.findByIdAndUpdate(
-         id,
-         updatedUserData,
-         { new: true },
-         (err, model) =>
-            (updateResponse = {
-               message: 'User data update',
-               success: true,
-               user: model,
-            }),
-      );
-
-      return updateResponse;
-   };
-}
-
+// TODO: move resolvers to separate file too
 const resolvers = {
    Mutation: {
-      createUser: (_, { newUser }, { dataSources }) =>
-         dataSources.UserAPI.createUser(newUser),
-      updateUser: (_, { userData }, { dataSources }) =>
-         dataSources.UserAPI.updateUser(userData),
+      createUser: (_, { userData }, { dataSources }) =>
+         dataSources.UserAPI.create(userData),
+      removeUser: (_, { id }, { dataSources }) =>
+         dataSources.UserAPI.remove(id),
+      updateUser: (_, { id, userData }, { dataSources }) =>
+         dataSources.UserAPI.update(id, userData),
    },
    Query: {},
 };
@@ -185,7 +91,7 @@ const startServer = async (typeDefs, resolvers) => {
    );
 
    // eslint-disable-next-line no-console
-   console.log(`Server read as http://localhost:${PORT}${server.graphqlPath}`);
+   console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
 };
 
 startServer(typeDefs, resolvers);
